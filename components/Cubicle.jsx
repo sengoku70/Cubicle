@@ -1,4 +1,5 @@
 import React, { useEffect,useState,useRef } from 'react';
+import Cube from './Cube.jsx';
 
 function Rubcstopology() {
 
@@ -165,12 +166,13 @@ function Rubcstopology() {
             <button onClick={()=>{sift(back,setBack,top,setTop,front,setFront,bottom,setBottom)}} className='absolute rounded-full left-56 top-113  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'></button> 
           
       </div>
-            <button onClick={()=>{sift(back,setBack,top,setTop,front,setFront,bottom,setBottom)}} className='absolute rounded-full left-66 top-120  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'></button> 
+            <button onClick={()=>{sift(back,setBack,top,setTop,front,setFront,bottom,setBottom)}} className='absolute rounded-full left-66 top-120  h-10 w-10 bg-yellow-400 rotate-35 hover:bg-blue-400 z-20'></button> 
        
       </div>
 
-     <RubiksCube/>
-
+      <div className='ml-[1000px]'>
+        <Cube/>
+      </div>
 
     </div>
 
@@ -181,154 +183,154 @@ function Rubcstopology() {
 export default Rubcstopology;
 
 
-function RubiksCube() {
+// function RubiksCube() {
 
-  const [pos, setPos] = useState({ x: 0, y: 0 })
+//   const [pos, setPos] = useState({ x: 0, y: 0 })
 
-  useEffect(() => {
-    const handleMove = (e) => {
-      setPos({ x: e.clientX, y: e.clientY })
-    }
+//   useEffect(() => {
+//     const handleMove = (e) => {
+//       setPos({ x: e.clientX, y: e.clientY })
+//     }
 
-    window.addEventListener('mousemove', handleMove)
-    return () => window.removeEventListener('mousemove', handleMove)
-  }, [])
+//     window.addEventListener('mousemove', handleMove)
+//     return () => window.removeEventListener('mousemove', handleMove)
+//   }, [])
 
-  return (
-    <div className="scene">
-      <style>{`
-        :root{
-          --size: 320px; /* cube overall size */
-          --sticker-gap: 6px;
-          --sticker-size: calc((var(--size) / 3) - var(--sticker-gap));
-        }
+//   return (
+//     <div className="scene">
+//       <style>{`
+//         :root{
+//           --size: 320px; /* cube overall size */
+//           --sticker-gap: 6px;
+//           --sticker-size: calc((var(--size) / 3) - var(--sticker-gap));
+//         }
 
-        .scene{
-          width: 100%;
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-top: 600px;
-          perspective: 1200px; /* important for CSS perspective */
-          -webkit-font-smoothing: antialiased;
-        }
+//         .scene{
+//           width: 100%;
+//           min-height: 100vh;
+//           display: flex;
+//           align-items: center;
+//           justify-content: center;
+//           margin-top: 600px;
+//           perspective: 1200px; /* important for CSS perspective */
+//           -webkit-font-smoothing: antialiased;
+//         }
 
-        .cube-wrap{
-          width: var(--size);
-          height: var(--size);
-          transform-style: preserve-3d;
-          transition: transform 700ms ease;
-        }
+//         .cube-wrap{
+//           width: var(--size);
+//           height: var(--size);
+//           transform-style: preserve-3d;
+//           transition: transform 700ms ease;
+//         }
 
       
-        .face{
-          position: absolute;
-          width: var(--size);
-          height: var(--size);
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          grid-gap: var(--sticker-gap);
-          padding: calc(var(--sticker-gap) / 2);
-          box-sizing: border-box;
-          backface-visibility: hidden;
-          border-radius: 8px;
-          box-shadow: 0 8px 20px rgba(0,0,0,0.6) inset;
-        }
+//         .face{
+//           position: absolute;
+//           width: var(--size);
+//           height: var(--size);
+//           display: grid;
+//           grid-template-columns: repeat(3, 1fr);
+//           grid-gap: var(--sticker-gap);
+//           padding: calc(var(--sticker-gap) / 2);
+//           box-sizing: border-box;
+//           backface-visibility: hidden;
+//           border-radius: 8px;
+//           box-shadow: 0 8px 20px rgba(0,0,0,0.6) inset;
+//         }
 
-        .sticker{
-          width: 100%;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 12px;
-          font-weight: 700;
-          color: rgba(0,0,0,0.6);
-          border-radius: 6px;
+//         .sticker{
+//           width: 100%;
+//           height: 100%;
+//           display: flex;
+//           align-items: center;
+//           justify-content: center;
+//           font-size: 12px;
+//           font-weight: 700;
+//           color: rgba(0,0,0,0.6);
+//           border-radius: 6px;
           
-          transform: translateZ(2px);
-        }
+//           transform: translateZ(2px);
+//         }
 
-        /* Classic Rubik's colours */
-        .white { background: #ffffff }
-        .yellow{ background: #ffeb3b }
-        .red   { background: #e53935 }
-        .orange{ background: #fb8c00 }
-        .blue  { background: #1e88e5 }
-        .green { background: #43a047 }
+//         /* Classic Rubik's colours */
+//         .white { background: #ffffff }
+//         .yellow{ background: #ffeb3b }
+//         .red   { background: #e53935 }
+//         .orange{ background: #fb8c00 }
+//         .blue  { background: #1e88e5 }
+//         .green { background: #43a047 }
 
-        /* Position each face in 3D */
-        .front  { transform: rotateY(  0deg) translateZ(calc(var(--size) / 2)); }
-        .back   { transform: rotateY(180deg) translateZ(calc(var(--size) / 2)); }
-        .right  { transform: rotateY( 90deg) translateZ(calc(var(--size) / 2)); }
-        .left   { transform: rotateY(-90deg) translateZ(calc(var(--size) / 2)); }
-        .top    { transform: rotateX( 90deg) translateZ(calc(var(--size) / 2)); }
-        .bottom { transform: rotateX(-90deg) translateZ(calc(var(--size) / 2)); }
+//         /* Position each face in 3D */
+//         .front  { transform: rotateY(  0deg) translateZ(calc(var(--size) / 2)); }
+//         .back   { transform: rotateY(180deg) translateZ(calc(var(--size) / 2)); }
+//         .right  { transform: rotateY( 90deg) translateZ(calc(var(--size) / 2)); }
+//         .left   { transform: rotateY(-90deg) translateZ(calc(var(--size) / 2)); }
+//         .top    { transform: rotateX( 90deg) translateZ(calc(var(--size) / 2)); }
+//         .bottom { transform: rotateX(-90deg) translateZ(calc(var(--size) / 2)); }
 
-        /* A subtle frame around the whole cube */
-        .cube-frame{
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          box-shadow:
-            0 10px 40px rgba(0,0,0,0.6),
-            0 1px 0 rgba(255,255,255,0.02) inset;
-          border-radius: 12px;
-        }
+//         /* A subtle frame around the whole cube */
+//         .cube-frame{
+//           position: absolute;
+//           inset: 0;
+//           pointer-events: none;
+//           box-shadow:
+//             0 10px 40px rgba(0,0,0,0.6),
+//             0 1px 0 rgba(255,255,255,0.02) inset;
+//           border-radius: 12px;
+//         }
 
-        /* Responsive smaller sizes */
-        @media (max-width: 480px){
-          :root{ --size: 260px }
-        }
-      `}</style>
+//         /* Responsive smaller sizes */
+//         @media (max-width: 480px){
+//           :root{ --size: 260px }
+//         }
+//       `}</style>
 
-      <div className="cube-wrap default-rot " style={{ transform : `rotateX(-${pos.y/2}deg) rotateY(-${pos.x/2}deg)`}} aria-hidden>
-        {/* We'll create 6 faces. Each face contains 9 stickers (3x3) --> total 54 stickers */}
+//       <div className="cube-wrap default-rot " style={{ transform : `rotateX(-${pos.y/2}deg) rotateY(-${pos.x/2}deg)`}} aria-hidden>
+//         {/* We'll create 6 faces. Each face contains 9 stickers (3x3) --> total 54 stickers */}
 
-        <div className="face front" aria-label="Front face">
-          {Array.from({length:9}).map((_,i) => (
-            <div key={i} className="sticker white" />
-          ))}
-        </div>
+//         <div className="face front" aria-label="Front face">
+//           {Array.from({length:9}).map((_,i) => (
+//             <div key={i} className="sticker white" />
+//           ))}
+//         </div>
 
-        <div className="face back" aria-label="Back face">
-          {Array.from({length:9}).map((_,i) => (
-            <div key={i} className="sticker yellow" />
-          ))}
-        </div>
+//         <div className="face back" aria-label="Back face">
+//           {Array.from({length:9}).map((_,i) => (
+//             <div key={i} className="sticker yellow" />
+//           ))}
+//         </div>
 
-        <div className="face right" aria-label="Right face">
-          {Array.from({length:9}).map((_,i) => (
-            <div key={i} className="sticker red" />
-          ))}
-        </div>
+//         <div className="face right" aria-label="Right face">
+//           {Array.from({length:9}).map((_,i) => (
+//             <div key={i} className="sticker red" />
+//           ))}
+//         </div>
 
-        <div className="face left" aria-label="Left face">
-          {Array.from({length:9}).map((_,i) => (
-            <div key={i} className="sticker orange" />
-          ))}
-        </div>
+//         <div className="face left" aria-label="Left face">
+//           {Array.from({length:9}).map((_,i) => (
+//             <div key={i} className="sticker orange" />
+//           ))}
+//         </div>
 
-        <div className="face top" aria-label="Top face">
-          {Array.from({length:9}).map((_,i) => (
-            <div key={i} className="sticker blue" />
-          ))}
-        </div>
+//         <div className="face top" aria-label="Top face">
+//           {Array.from({length:9}).map((_,i) => (
+//             <div key={i} className="sticker blue" />
+//           ))}
+//         </div>
 
-        <div className="face bottom" aria-label="Bottom face">
-          {Array.from({length:9}).map((_,i) => (
-            <div key={i} className="sticker green" />
-          ))}
-        </div>
+//         <div className="face bottom" aria-label="Bottom face">
+//           {Array.from({length:9}).map((_,i) => (
+//             <div key={i} className="sticker green" />
+//           ))}
+//         </div>
 
-        <div className="cube-frame" />
-      </div>
+//         <div className="cube-frame" />
+//       </div>
 
-      {/* small hint text  */}
-      <div style={{position: 'absolute', bottom: 18, left: 18, color: '#ddd', fontSize: 13, opacity: 0.9}}>
-        Hover to tilt · 6 faces × 9 stickers = 54 stickers {pos.x},{pos.y}
-      </div>
-    </div>
-  )
-}
+//       {/* small hint text  */}
+//       <div style={{position: 'absolute', bottom: 18, left: 18, color: '#ddd', fontSize: 13, opacity: 0.9}}>
+//         Hover to tilt · 6 faces × 9 stickers = 54 stickers {pos.x},{pos.y}
+//       </div>
+//     </div>
+//   )
+// }
