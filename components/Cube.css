@@ -1,0 +1,46 @@
+.cube-viewport {
+  width: 520px;
+  height: 520px;
+  perspective: 1200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: grab;
+}
+
+/* THIS is the actual cube */
+.cube-scene {
+  width: 420px;
+  height: 420px;
+  position: relative;
+  transform-style: preserve-3d;
+  transform-origin: center center;
+  transition: transform 0.12s linear;
+}
+
+/* Faces */
+.face {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 6px;
+  backface-visibility: hidden;
+}
+
+/* Correct cube depth = half of face size */
+.face.front { transform: rotateY(0deg) translateZ(210px); }
+.face.back { transform: rotateY(180deg) translateZ(210px); }
+.face.right { transform: rotateY(90deg) translateZ(210px); }
+.face.left { transform: rotateY(-90deg) translateZ(210px); }
+.face.up { transform: rotateX(90deg) translateZ(210px); }
+.face.down { transform: rotateX(-90deg) translateZ(210px); }
+
+.cubie {
+  border-radius: 4px;
+  box-shadow:
+    inset 0 2px 0 rgba(0,0,0,0.3),
+    0 4px 12px rgba(0,0,0,0.4);
+}

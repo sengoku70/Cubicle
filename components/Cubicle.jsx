@@ -15,7 +15,7 @@ function Rubcstopology() {
 
   const ColorDot = ({ color, index }) => (
   <div
-    className={`w-5 h-5 rounded-full text-center font-bold ${
+    className={`w-5 h-5 rounded-full text-black text-center font-bold ${
       color === "r"
         ? "bg-red-500"
         : color === "y"
@@ -31,15 +31,48 @@ function Rubcstopology() {
   >{index}</div>
 );
 
-  const sift = (a, setA, b, setB, c, setC, d, setD) => {
-    console.log("r",a,"f",b,"l",c,"bk",d);
-    const temp = d;
-    setD(c);
-    setC(b);
-    setB(a);
-    setA(temp);
-    console.log(rotate);
-  };
+const sift = (
+  a, setA, aIdx,
+  b, setB, bIdx,
+  c, setC, cIdx,
+  d, setD, dIdx
+) => {
+  // clone faces (important: React immutability)
+  const A = [...a];
+  const B = [...b];
+  const C = [...c];
+  const D = [...d];
+
+  // store d → temp
+  const temp = dIdx.map(i => D[i]);
+
+  // d ← c
+  dIdx.forEach((di, i) => {
+    D[di] = C[cIdx[i]];
+  });
+
+  // c ← b
+  cIdx.forEach((ci, i) => {
+    C[ci] = B[bIdx[i]];
+  });
+
+  // b ← a
+  bIdx.forEach((bi, i) => {
+    B[bi] = A[aIdx[i]];
+  });
+
+  // a ← temp
+  aIdx.forEach((ai, i) => {
+    A[ai] = temp[i];
+  });
+
+  // update state
+  setA(A);
+  setB(B);
+  setC(C);
+  setD(D);
+};
+
 
   
   
@@ -58,12 +91,12 @@ function Rubcstopology() {
 
         
 
-      <h1 className='bg-white opacity-15 w-15 h-15 absolute left-[476px] top-[285px] text-center font-bold text-[40px]'>T</h1>
-      <h1 className='bg-white opacity-15 w-15 h-15 absolute left-[330px] top-[600px] text-center font-bold text-[40px]'>F</h1>
-      <h1 className='bg-white opacity-15 w-15 h-15 absolute left-[630px] top-[600px] text-center font-bold text-[40px]'>L</h1>
-      <h1 className='bg-white opacity-15 w-15 h-15 absolute left-[770px] top-[280px] text-center font-bold text-[40px]'>Bk</h1>
-      <h1 className='bg-white opacity-15 w-15 h-15 absolute left-[190px] top-[280px] text-center font-bold text-[40px]'>R</h1>
-      <h1 className='bg-white opacity-15 w-15 h-15 absolute left-[480px] top-[810px] text-center font-bold text-[40px]'>Bt</h1>
+      <h1 className='bg-neutral-700 opacity-35 w-15 h-15 absolute left-[476px] top-[285px] text-center font-bold text-[40px]'>T</h1>
+      <h1 className='bg-neutral-700 opacity-35 w-15 h-15 absolute left-[330px] top-[600px] text-center font-bold text-[40px]'>F</h1>
+      <h1 className='bg-neutral-700 opacity-35 w-15 h-15 absolute left-[630px] top-[600px] text-center font-bold text-[40px]'>L</h1>
+      <h1 className='bg-neutral-700 opacity-35 w-15 h-15 absolute left-[770px] top-[280px] text-center font-bold text-[40px]'>Bk</h1>
+      <h1 className='bg-neutral-700 opacity-35 w-15 h-15 absolute left-[190px] top-[280px] text-center font-bold text-[40px]'>R</h1>
+      <h1 className='bg-neutral-700 opacity-35 w-15 h-15 absolute left-[480px] top-[810px] text-center font-bold text-[40px]'>Bt</h1>
 
 
 
@@ -77,12 +110,12 @@ function Rubcstopology() {
 
 </table>
 
-<div className="absolute z-20  h-19 w-19 left-[253px] top-[327px] -rotate-9 -skew-11 grid grid-cols-3">
+<div className="absolute z-20  h-19 w-19 left-[245px] top-[327px] rotate-80 skew-11 grid grid-cols-3">
   {right.map((c, i) => <ColorDot key={i} color={c}  index={i} />)}
   
 </div>
 
-<div className="absolute z-20 h-19 w-19 left-[700px] top-[330px] skew-11 rotate-8 grid grid-cols-3">
+<div className="absolute z-20 h-19 w-19 left-[695px] top-[325px] -skew-10 -rotate-80 grid grid-cols-3">
   {back.map((c, i) => <ColorDot key={i} color={c}  index={i} />)}
   
 </div>
@@ -108,22 +141,59 @@ function Rubcstopology() {
  
 
       <div className="absolute left-65 top-30 w-[500px] h-[500px] border-2 border-red-300 border-dashed rounded-full flex justify-center items-center">
-        <button onClick={()=>{sift(back,setBack,left,setLeft,front,setFront,right,setRight)}} className='absolute rounded-full left-6 top-15  h-10 w-10 bg-yellow-400 rotate-35 hover:bg-blue-400 z-20'></button>
+        <button onClick={()=>{sift(
+  back,  setBack,  [0,1,2],
+  left,  setLeft,  [0,1,2],
+  front, setFront, [0,1,2],
+  right, setRight, [0,1,2]
+)
+}} className='absolute rounded-full left-6 top-15  h-10 w-10 bg-yellow-400 rotate-35 hover:bg-blue-400 z-20'>1</button>
  
         
       <div className="w-[450px] h-[450px] border-2 border-red-300 border-dashed rounded-full flex justify-center items-center">
-         <button onClick={()=>{sift(back,setBack,left,setLeft,front,setFront,right,setRight)}} className='absolute rounded-full left-18 top-15  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'></button>
+         <button onClick={()=>{sift(
+  back,  setBack,  [3,4,5],
+  left,  setLeft,  [3,4,5],
+  front, setFront, [3,4,5],
+  right, setRight, [3,4,5]
+)
+}} className='absolute rounded-full left-18 top-15  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'>2</button>
  
       <div className="w-[400px] h-[400px] border-2 border-red-300 border-dashed rounded-full ">
-        <button onClick={()=>{sift(back,setBack,left,setLeft,front,setFront,right,setRight)}} className='absolute rounded-full left-32 top-15  h-10 w-10 bg-yellow-400/30  hover:bg-blue-400 z-20'></button>
-        <button onClick={()=>{sift(right,setRight,front,setFront,left,setLeft,back,setBack)}} className='absolute rounded-full left-110 top-15 h-10 w-10 bg-yellow-400/30  hover:bg-blue-400 z-20'></button>
+        <button onClick={()=>{sift(
+  back,  setBack,  [6,7,8],
+  left,  setLeft,  [6,7,8],
+  front, setFront, [6,7,8],
+  right, setRight, [6,7,8]
+)
+}} className='absolute rounded-full left-32 top-15  h-10 w-10 bg-yellow-400/30  hover:bg-blue-400 z-20'>3</button>
+        <button onClick={()=>{sift(
+  right, setRight, [6,7,8],
+  front, setFront, [6,7,8],
+  left,  setLeft,  [6,7,8],
+  back,  setBack,  [6,7,8]
+)
+}} className='absolute rounded-full left-110 top-15 h-10 w-10 bg-yellow-400/30  hover:bg-blue-400 z-20'>4</button>
  
           
       </div>
-           <button onClick={()=>{sift(right,setRight,front,setFront,left,setLeft,back,setBack)}} className='absolute rounded-full left-95 top-15 h-10 w-10 bg-yellow-400/30  hover:bg-blue-400 z-20'></button>
+           <button onClick={()=>{sift(
+  right, setRight, [3,4,5],
+  front, setFront, [3,4,5],
+  left,  setLeft,  [3,4,5],
+  back,  setBack,  [3,4,5]
+)
+}} className='absolute rounded-full left-95 top-15 h-10 w-10 bg-yellow-400/30  hover:bg-blue-400 z-20'>5</button>
  
       </div>
-           <button onClick={()=>{sift(right,setRight,front,setFront,left,setLeft,back,setBack)}} className='absolute rounded-full left-80 top-15 h-10 w-10 bg-yellow-400/30  hover:bg-blue-400 z-20'></button>
+
+<button onClick={()=>{sift(
+  right, setRight, [0,1,2],
+  front, setFront, [0,1,2],
+  left,  setLeft,  [0,1,2],
+  back,  setBack,  [0,1,2]
+)
+}} className='absolute rounded-full left-80 top-15 h-10 w-10 bg-yellow-400/30  hover:bg-blue-400 z-20'>6</button>
  
       </div>
 
@@ -131,20 +201,59 @@ function Rubcstopology() {
    
 
       <div className="absolute left-30 top-80 w-[500px] h-[500px] border-2 border-white border-dashed  rounded-full flex justify-center items-center">
-          <button onClick={()=>{sift(bottom,setBottom,left,setLeft,top,setTop,right,setRight)}} className='absolute rounded-full left-4 top-25  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'></button>
+          <button onClick={()=>{sift(
+  bottom, setBottom, [6,7,8],
+  left,   setLeft,   [0,3,6],
+  top,    setTop,    [0,1,2],
+  right,  setRight,  [2,5,8]
+)
+}} className='absolute rounded-full left-4 top-25  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'>7</button>
  
           <div className="w-[450px] h-[450px] border-2 border-red-300 border-dashed rounded-full flex justify-center items-center">
-          <button onClick={()=>{sift(bottom,setBottom,left,setLeft,top,setTop,right,setRight)}} className='absolute rounded-full left-4 top-38  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'></button>
+          <button onClick={()=>{sift(
+  bottom, setBottom, [3,4,5],
+  left,   setLeft,   [1,4,7],
+  top,    setTop,    [3,4,5],
+  right,  setRight,  [1,4,7]
+)
+}} className='absolute rounded-full left-4 top-38  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'>8</button>
  
           <div className="w-[400px] h-[400px] border-2 border-red-300 border-dashed rounded-full ">
-            <button onClick={()=>{sift(bottom,setBottom,left,setLeft,top,setTop,right,setRight)}} className='absolute rounded-full left-8 top-51  h-10 w-10 bg-yellow-400/30  hover:bg-blue-400 z-20'></button>
-            <button onClick={()=>{sift(right,setRight,top,setTop,left,setLeft,bottom,setBottom)}} className='absolute rounded-full left-40 top-110 h-10 w-10 bg-yellow-400/30  hover:bg-blue-400 z-20'></button>
+            <button onClick={()=>{sift(
+  bottom, setBottom, [0,1,2],
+  left,   setLeft,   [2,5,8],
+  top,    setTop,    [6,7,8],
+  right,  setRight,  [0,3,6]
+)
+}} className='absolute rounded-full left-8 top-51  h-10 w-10 bg-yellow-400/30  hover:bg-blue-400 z-20'>9</button>
+
+            <button onClick={()=>{sift(
+  right,  setRight,  [1,4,7],
+  top,    setTop,    [3,4,5],
+  left,   setLeft,   [1,4,7],
+  bottom, setBottom, [3,4,5]
+)
+}} className='absolute rounded-full left-40 top-110 h-10 w-10 bg-yellow-400/30  hover:bg-blue-400 z-20'>10</button>
+ 
+</div>
+
+<button onClick={()=>{sift(
+  right,  setRight,  [0,3,6],
+  top,    setTop,    [6,7,8],
+  left,   setLeft,   [2,5,8],
+  bottom, setBottom, [0,1,2]
+)
+
+}} className='absolute rounded-full left-30 top-98 h-10 w-10 bg-yellow-400/30  hover:bg-blue-400 z-20'>11</button>
  
       </div>
-          <button onClick={()=>{sift(right,setRight,top,setTop,left,setLeft,bottom,setBottom)}} className='absolute rounded-full left-30 top-98 h-10 w-10 bg-yellow-400/30  hover:bg-blue-400 z-20'></button>
- 
-      </div>
-          <button onClick={()=>{sift(right,setRight,top,setTop,left,setLeft,bottom,setBottom)}} className='absolute rounded-full left-50 top-120 h-10 w-10 bg-yellow-400/30  hover:bg-blue-400 z-20'></button>
+          <button onClick={()=>{sift(
+  right,  setRight,  [2,5,8],
+  top,    setTop,    [0,1,2],
+  left,   setLeft,   [0,3,6],
+  bottom, setBottom, [6,7,8]
+)
+}} className='absolute rounded-full left-50 top-120 h-10 w-10 bg-yellow-400/30  hover:bg-blue-400 z-20'>12</button>
  
       </div>
 
@@ -153,25 +262,71 @@ function Rubcstopology() {
 
      
       <div className="absolute left-100 top-80 w-[500px] h-[500px] border-2 border-green-300 border-dashed  rounded-full flex  justify-center items-center">
-           <button onClick={()=>{sift(bottom,setBottom,front,setFront,top,setTop,back,setBack)}} className='absolute rounded-full left-116 top-25  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'></button>
+           <button onClick={()=>{sift(
+  bottom, setBottom, [0,3,6],
+  front,  setFront,  [0,3,6],
+  top,    setTop,    [0,3,6],
+  back,   setBack,   [2,5,8]
+)
+}} className='absolute rounded-full left-116 top-25  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'>13</button>
 
           <div className="w-[450px] h-[450px] border-2 border-red-300 border-dashed rounded-full flex justify-center items-center">
 
-             <button onClick={()=>{sift(bottom,setBottom,front,setFront,top,setTop,back,setBack)}} className='absolute rounded-full left-106 top-25  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'></button> 
+             <button onClick={()=>{sift(
+  bottom, setBottom, [1,4,7],
+  front,  setFront,  [1,4,7],
+  top,    setTop,    [1,4,7],
+  back,   setBack,   [1,4,7]
+)
+}} className='absolute rounded-full left-106 top-25  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'>14</button> 
 
           <div className="w-[400px] h-[400px] border-2 border-red-300 border-dashed rounded-full ">
-            <button onClick={()=>{sift(bottom,setBottom,front,setFront,top,setTop,back,setBack)}} className='absolute rounded-full left-96 top-25  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'></button> 
-            <button onClick={()=>{sift(back,setBack,top,setTop,front,setFront,bottom,setBottom)}} className='absolute rounded-full left-46 top-105  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'></button> 
+            <button onClick={()=>{sift(
+  bottom, setBottom, [0,3,6],
+  front,  setFront, [0,3,6],
+  top,    setTop, [0,3,6],
+  back,   setBack, [2,5,8]
+)
+}} className='absolute rounded-full left-96 top-25  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'>15</button> 
+
+
+            <button onClick={()=>{sift(
+  back,   setBack,   [2,5,8],
+  top,    setTop,    [0,3,6],
+  front,  setFront,  [0,3,6],
+  bottom, setBottom, [0,3,6]
+)
+}} className='absolute rounded-full left-46 top-105  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'>16</button> 
       </div>
-            <button onClick={()=>{sift(back,setBack,top,setTop,front,setFront,bottom,setBottom)}} className='absolute rounded-full left-56 top-113  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'></button> 
+            <button onClick={()=>{sift(
+  back,   setBack,   [1,4,7],
+  top,    setTop,    [1,4,7],
+  front,  setFront,  [1,4,7],
+  bottom, setBottom, [1,4,7]
+)
+}} className='absolute rounded-full left-56 top-113  h-10 w-10 bg-yellow-400/30 rotate-35 hover:bg-blue-400 z-20'>17</button> 
           
       </div>
-            <button onClick={()=>{sift(back,setBack,top,setTop,front,setFront,bottom,setBottom)}} className='absolute rounded-full left-66 top-120  h-10 w-10 bg-yellow-400 rotate-35 hover:bg-blue-400 z-20'></button> 
+            <button onClick={()=>{sift(
+  back,   setBack,   [0,3,6],
+  top,    setTop,    [2,5,8],
+  front,  setFront,  [2,5,8],
+  bottom, setBottom, [2,5,8]
+)
+}} className='absolute rounded-full left-66 top-120  h-10 w-10 bg-yellow-400 rotate-35 hover:bg-blue-400 z-20'>18</button> 
        
       </div>
 
-      <div className='ml-[1000px]'>
-        <Cube/>
+      <div className='ml-[1200px] mt-[200px]'>
+        <Cube
+          top={top}
+          bottom={bottom}
+          left={left}
+          right={right}
+          front={front}
+          back={back}
+        />
+
       </div>
 
     </div>
@@ -182,155 +337,3 @@ function Rubcstopology() {
 
 export default Rubcstopology;
 
-
-// function RubiksCube() {
-
-//   const [pos, setPos] = useState({ x: 0, y: 0 })
-
-//   useEffect(() => {
-//     const handleMove = (e) => {
-//       setPos({ x: e.clientX, y: e.clientY })
-//     }
-
-//     window.addEventListener('mousemove', handleMove)
-//     return () => window.removeEventListener('mousemove', handleMove)
-//   }, [])
-
-//   return (
-//     <div className="scene">
-//       <style>{`
-//         :root{
-//           --size: 320px; /* cube overall size */
-//           --sticker-gap: 6px;
-//           --sticker-size: calc((var(--size) / 3) - var(--sticker-gap));
-//         }
-
-//         .scene{
-//           width: 100%;
-//           min-height: 100vh;
-//           display: flex;
-//           align-items: center;
-//           justify-content: center;
-//           margin-top: 600px;
-//           perspective: 1200px; /* important for CSS perspective */
-//           -webkit-font-smoothing: antialiased;
-//         }
-
-//         .cube-wrap{
-//           width: var(--size);
-//           height: var(--size);
-//           transform-style: preserve-3d;
-//           transition: transform 700ms ease;
-//         }
-
-      
-//         .face{
-//           position: absolute;
-//           width: var(--size);
-//           height: var(--size);
-//           display: grid;
-//           grid-template-columns: repeat(3, 1fr);
-//           grid-gap: var(--sticker-gap);
-//           padding: calc(var(--sticker-gap) / 2);
-//           box-sizing: border-box;
-//           backface-visibility: hidden;
-//           border-radius: 8px;
-//           box-shadow: 0 8px 20px rgba(0,0,0,0.6) inset;
-//         }
-
-//         .sticker{
-//           width: 100%;
-//           height: 100%;
-//           display: flex;
-//           align-items: center;
-//           justify-content: center;
-//           font-size: 12px;
-//           font-weight: 700;
-//           color: rgba(0,0,0,0.6);
-//           border-radius: 6px;
-          
-//           transform: translateZ(2px);
-//         }
-
-//         /* Classic Rubik's colours */
-//         .white { background: #ffffff }
-//         .yellow{ background: #ffeb3b }
-//         .red   { background: #e53935 }
-//         .orange{ background: #fb8c00 }
-//         .blue  { background: #1e88e5 }
-//         .green { background: #43a047 }
-
-//         /* Position each face in 3D */
-//         .front  { transform: rotateY(  0deg) translateZ(calc(var(--size) / 2)); }
-//         .back   { transform: rotateY(180deg) translateZ(calc(var(--size) / 2)); }
-//         .right  { transform: rotateY( 90deg) translateZ(calc(var(--size) / 2)); }
-//         .left   { transform: rotateY(-90deg) translateZ(calc(var(--size) / 2)); }
-//         .top    { transform: rotateX( 90deg) translateZ(calc(var(--size) / 2)); }
-//         .bottom { transform: rotateX(-90deg) translateZ(calc(var(--size) / 2)); }
-
-//         /* A subtle frame around the whole cube */
-//         .cube-frame{
-//           position: absolute;
-//           inset: 0;
-//           pointer-events: none;
-//           box-shadow:
-//             0 10px 40px rgba(0,0,0,0.6),
-//             0 1px 0 rgba(255,255,255,0.02) inset;
-//           border-radius: 12px;
-//         }
-
-//         /* Responsive smaller sizes */
-//         @media (max-width: 480px){
-//           :root{ --size: 260px }
-//         }
-//       `}</style>
-
-//       <div className="cube-wrap default-rot " style={{ transform : `rotateX(-${pos.y/2}deg) rotateY(-${pos.x/2}deg)`}} aria-hidden>
-//         {/* We'll create 6 faces. Each face contains 9 stickers (3x3) --> total 54 stickers */}
-
-//         <div className="face front" aria-label="Front face">
-//           {Array.from({length:9}).map((_,i) => (
-//             <div key={i} className="sticker white" />
-//           ))}
-//         </div>
-
-//         <div className="face back" aria-label="Back face">
-//           {Array.from({length:9}).map((_,i) => (
-//             <div key={i} className="sticker yellow" />
-//           ))}
-//         </div>
-
-//         <div className="face right" aria-label="Right face">
-//           {Array.from({length:9}).map((_,i) => (
-//             <div key={i} className="sticker red" />
-//           ))}
-//         </div>
-
-//         <div className="face left" aria-label="Left face">
-//           {Array.from({length:9}).map((_,i) => (
-//             <div key={i} className="sticker orange" />
-//           ))}
-//         </div>
-
-//         <div className="face top" aria-label="Top face">
-//           {Array.from({length:9}).map((_,i) => (
-//             <div key={i} className="sticker blue" />
-//           ))}
-//         </div>
-
-//         <div className="face bottom" aria-label="Bottom face">
-//           {Array.from({length:9}).map((_,i) => (
-//             <div key={i} className="sticker green" />
-//           ))}
-//         </div>
-
-//         <div className="cube-frame" />
-//       </div>
-
-//       {/* small hint text  */}
-//       <div style={{position: 'absolute', bottom: 18, left: 18, color: '#ddd', fontSize: 13, opacity: 0.9}}>
-//         Hover to tilt · 6 faces × 9 stickers = 54 stickers {pos.x},{pos.y}
-//       </div>
-//     </div>
-//   )
-// }
