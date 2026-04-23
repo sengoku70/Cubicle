@@ -3,6 +3,7 @@ import Cubicle from '../components/Cubicle'
 import './App.css'
 import Testpage from '../components/Testpage'
 import Cubefunc from '../components/Cubefunc'
+import Cube from '../components/Cube'
 
 function App() {
   const [count, setCount] = useState(0)
